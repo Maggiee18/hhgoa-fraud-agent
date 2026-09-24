@@ -1,0 +1,11 @@
+[runner]
+# Streamlit's "magic" auto-display can wrap a bare top-level expression
+# statement (e.g. `st.dataframe(x) if cond else st.write(y)` used as a
+# statement rather than assigned) in an extra st.write() call over its
+# return value. The return value of st.dataframe()/st.write() isn't
+# meant to be re-rendered, which raised
+# "StreamlitAPIException: `_repr_html_()` is not a valid Streamlit
+# command." The app code is now written to avoid that pattern, but
+# magic is disabled here too as a safety net against the same class of
+# bug in any tab not yet exercised.
+magicEnabled = false

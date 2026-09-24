@@ -210,11 +210,17 @@ with tabs[2]:
     with ac1:
         st.markdown("**Before additional evidence**")
         df_i = _actions_df(nba.get("initial"))
-        st.dataframe(df_i, use_container_width=True, hide_index=True) if df_i is not None else st.write("(none)")
+        if df_i is not None:
+            st.dataframe(df_i, use_container_width=True, hide_index=True)
+        else:
+            st.write("(none)")
     with ac2:
         st.markdown("**After additional evidence**")
         df_f = _actions_df(nba.get("final"))
-        st.dataframe(df_f, use_container_width=True, hide_index=True) if df_f is not None else st.write("(none)")
+        if df_f is not None:
+            st.dataframe(df_f, use_container_width=True, hide_index=True)
+        else:
+            st.write("(none)")
     st.markdown("**What changed**")
     st.write(nba.get("what_changed", "nothing"))
     st.caption(
