@@ -9,3 +9,10 @@
 # magic is disabled here too as a safety net against the same class of
 # bug in any tab not yet exercised.
 magicEnabled = false
+
+[theme]
+primaryColor = "#DC2626"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F1F5F9"
+textColor = "#0F172A"
+font = "sans serif"

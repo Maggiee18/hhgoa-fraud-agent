@@ -34,7 +34,58 @@ from backend.case_store import (
     save_case_answer,
 )
 
-st.set_page_config(page_title="HHGOA Fraud Investigation Agent", layout="wide")
+st.set_page_config(page_title="HHGOA Fraud Investigation Agent", layout="wide", page_icon="\U0001f6e1️")
+
+# Custom theme on top of Streamlit's default look: a dark analyst-console
+# sidebar, a real typeface, card-style metrics, and Streamlit's own chrome
+# (hamburger menu, "Made with Streamlit" footer, the rainbow top bar) hidden.
+# Scoped to CSS only - no functional widget behavior changes, so this can't
+# regress anything already verified working end to end.
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    html, body, [class*="css"], [class*="st-"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    #MainMenu, footer { visibility: hidden; }
+    div[data-testid="stDecoration"] { display: none; }
+    header[data-testid="stHeader"] { background: transparent; }
+
+    [data-testid="stSidebar"] {
+        background-color: #0F172A;
+        border-right: 1px solid #1E293B;
+    }
+    [data-testid="stSidebar"] * { color: #E2E8F0 !important; }
+    [data-testid="stSidebar"] .stTextInput input,
+    [data-testid="stSidebar"] [data-baseweb="select"] > div,
+    [data-testid="stSidebar"] .stButton button {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        color: #E2E8F0 !important;
+    }
+    [data-testid="stSidebar"] .stButton button:hover {
+        border-color: #DC2626;
+        color: #ffffff !important;
+    }
+    [data-testid="stSidebar"] hr { border-color: #1E293B; }
+
+    div[data-testid="stMetric"] {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 14px 18px;
+    }
+    div[data-testid="stMetricLabel"] { color: #64748B; font-weight: 500; }
+
+    button[data-baseweb="tab"] { font-weight: 600; }
+    h1, h2, h3 { color: #0F172A; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 VERDICT_COLOR = {"fraud": "#d62728", "legitimate": "#2ca02c", "uncertain": "#ff7f0e"}
 STATUS_LABEL = {
@@ -105,7 +156,16 @@ verdict = case["verdict"]
 status = case["status"]
 prob = case["fraud_probability"]
 
-st.title(f"{selected_case_id}")
+badge_color = VERDICT_COLOR.get(verdict, "#64748B")
+st.markdown(
+    f"<div style='display:flex;align-items:center;gap:14px;margin-bottom:4px;'>"
+    f"<h1 style='margin:0;'>{selected_case_id}</h1>"
+    f"<span style='background:{badge_color}1a;color:{badge_color};padding:5px 14px;"
+    f"border-radius:999px;font-weight:700;font-size:0.8rem;letter-spacing:0.04em;"
+    f"text-transform:uppercase;'>{verdict}</span>"
+    f"</div>",
+    unsafe_allow_html=True,
+)
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Status", STATUS_LABEL.get(status, status))
 col2.metric("Verdict", verdict.capitalize())
