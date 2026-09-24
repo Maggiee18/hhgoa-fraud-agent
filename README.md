@@ -18,22 +18,22 @@ This loop is implemented as an explicit LangGraph state graph in `agent/graph_ag
 
 ```mermaid
 flowchart TD
-    T[Trigger: risk score / customer report / analyst request] --> I[Investigate: open or reopen a FraudCase]
-    I --> G[Gather evidence: GSQL queries over TigerGraph]
-    G --> U{Assess uncertainty}
-    U -- evidence insufficient --> M[Request more evidence:\ncustomer validation, step-up auth,\nanalyst input]
+    T["Trigger: risk score / customer report / analyst request"] --> I["Investigate: open or reopen a FraudCase"]
+    I --> G["Gather evidence: GSQL queries over TigerGraph"]
+    G --> U{"Assess uncertainty"}
+    U -- "evidence insufficient" --> M["Request more evidence:<br/>customer validation, step-up auth,<br/>analyst input"]
     M --> G
-    U -- evidence sufficient --> A[Select next-best action(s):\ndeterministic policy engine]
-    A --> E[Explain: evidence, uncertainty,\nreasoning, SAR if required]
-    E --> W[Write case back to TigerGraph\n+ update case memory]
+    U -- "evidence sufficient" --> A["Select next best actions:<br/>deterministic policy engine"]
+    A --> E["Explain: evidence, uncertainty,<br/>reasoning, SAR if required"]
+    E --> W["Write case back to TigerGraph<br/>+ update case memory"]
 
-    subgraph Graph["TigerGraph Savanna"]
-        C[(Customer / Card / Transaction\nDeviceProfile / EmailDomain\nBillingRegion / FraudCase)]
+    subgraph TG["TigerGraph Savanna"]
+        C[("Customer / Card / Transaction<br/>DeviceProfile / EmailDomain<br/>BillingRegion / FraudCase")]
     end
-    G <--> Graph
-    W --> Graph
-    W --> Mem[(Case memory:\nTF-IDF similarity over\nhistorical + agent cases)]
-    Mem -.informs.-> G
+    G <--> TG
+    W --> TG
+    W --> Mem[("Case memory:<br/>TF-IDF similarity over<br/>historical + agent cases")]
+    Mem -. informs .-> G
 ```
 
 ## Architecture
