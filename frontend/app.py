@@ -72,6 +72,27 @@ st.markdown(
     }
     [data-testid="stSidebar"] hr { border-color: #1E293B; }
 
+    [data-testid="stSidebar"] [data-testid="stExpander"] {
+        background-color: #1E293B;
+        border: 1px solid #334155;
+        border-radius: 8px;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] summary {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    /* case list radio buttons: full-width, spaced rows instead of a cramped
+       default radio group */
+    [data-testid="stSidebar"] div[role="radiogroup"] label {
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin-bottom: 2px;
+    }
+    [data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+        background-color: #1E293B;
+    }
+
     div[data-testid="stMetric"] {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
@@ -97,42 +118,57 @@ STATUS_LABEL = {
 
 
 # --- Sidebar: case selection / live run -------------------------------------
+# Layout deliberately puts the thing people actually use 95% of the time -
+# browsing an already-investigated case - front and center, and tucks the
+# dev-facing controls (raw folder path, backend picker, live-trigger form)
+# into a collapsed "Advanced" expander below. cases_dir is read from
+# session_state (set by the widget inside that expander) rather than from a
+# widget defined at this point in the script, so its *value* can be used up
+# here while the *widget* itself still renders lower on the page.
 
-st.sidebar.title("HHGOA Fraud Agent")
-cases_dir = st.sidebar.text_input("Answers directory", value=CASES_DIR_DEFAULT)
+st.sidebar.markdown(
+    "<div style='font-size:1.3rem;font-weight:700;line-height:1.2;'>HHGOA Fraud Agent</div>"
+    "<div style='color:#94A3B8;font-size:0.78rem;margin-bottom:20px;'>"
+    "Agentic fraud investigation &middot; TigerGraph</div>",
+    unsafe_allow_html=True,
+)
+
+cases_dir = st.session_state.get("cases_dir_input", CASES_DIR_DEFAULT)
 available = list_case_files(cases_dir)
 
-st.sidebar.markdown("---")
-st.sidebar.subheader("Run a new investigation")
-try:
-    case_pack = load_case_pack()
-    candidate_ids = case_pack["case_id"].tolist()
-except Exception as e:
-    case_pack = None
-    candidate_ids = []
-    st.sidebar.warning(f"Could not load case_pack.csv: {e}")
-
-new_case_id = st.sidebar.selectbox("case_pack.csv trigger", options=["(none)"] + candidate_ids)
-backend_choice = st.sidebar.selectbox("Graph backend", options=["(env default)", "local", "tigergraph"])
-if st.sidebar.button("Investigate", disabled=(new_case_id == "(none)")):
-    with st.spinner(f"Investigating {new_case_id}..."):
-        try:
-            backend = None if backend_choice == "(env default)" else backend_choice
-            answer = run_new_case(new_case_id, backend)
-            path = save_case_answer(answer, cases_dir)
-            st.sidebar.success(f"Wrote {path}")
-            st.rerun()
-        except Exception as e:
-            st.sidebar.error(f"Investigation failed: {e}")
-            if "ANTHROPIC_API_KEY" in str(e):
-                st.sidebar.info("Set ANTHROPIC_API_KEY in .env to enable live investigations.")
-
-st.sidebar.markdown("---")
 if not available:
-    st.sidebar.info("No case answers yet. Run `python scripts/run_benchmark.py` or use 'Investigate' above.")
+    st.sidebar.info("No case answers yet. Open 'Run a new investigation' below.")
     selected_case_id = None
 else:
-    selected_case_id = st.sidebar.radio("Investigated cases", options=available)
+    st.sidebar.caption("INVESTIGATED CASES")
+    selected_case_id = st.sidebar.radio("Investigated cases", options=available, label_visibility="collapsed")
+
+with st.sidebar.expander("Run a new investigation"):
+    try:
+        case_pack = load_case_pack()
+        candidate_ids = case_pack["case_id"].tolist()
+    except Exception as e:
+        case_pack = None
+        candidate_ids = []
+        st.warning(f"Could not load case_pack.csv: {e}")
+
+    new_case_id = st.selectbox("Case to investigate", options=["(none)"] + candidate_ids)
+    backend_choice = st.selectbox("Graph backend", options=["(env default)", "local", "tigergraph"])
+    if st.button("Investigate", disabled=(new_case_id == "(none)")):
+        with st.spinner(f"Investigating {new_case_id}..."):
+            try:
+                backend = None if backend_choice == "(env default)" else backend_choice
+                answer = run_new_case(new_case_id, backend)
+                path = save_case_answer(answer, cases_dir)
+                st.success(f"Wrote {path}")
+                st.rerun()
+            except Exception as e:
+                st.error(f"Investigation failed: {e}")
+                if "ANTHROPIC_API_KEY" in str(e):
+                    st.info("Set ANTHROPIC_API_KEY in .env to enable live investigations.")
+
+    st.markdown("---")
+    st.text_input("Cases folder", value=CASES_DIR_DEFAULT, key="cases_dir_input")
 
 
 # --- Main -------------------------------------------------------------------
@@ -336,17 +372,31 @@ with tabs[4]:
     if not similar:
         st.write("No similar prior cases were retrieved.")
     else:
-        try:
-            closed = pd.read_csv(os.path.join(DATA_DIR, "closed_cases_history.csv"))
+        closed = None
+        closed_path = os.path.join(DATA_DIR, "closed_cases_history.csv")
+        if os.path.exists(closed_path):
+            try:
+                closed = pd.read_csv(closed_path)
+            except Exception:
+                closed = None
+        if closed is not None:
             rows = closed[closed["case_id"].isin(similar)][
                 ["case_id", "pattern", "outcome", "exposure_usd", "n_txns", "opened_at", "closed_at"]
             ]
             # preserve retrieval order / rank
             rows = rows.set_index("case_id").reindex(similar).reset_index()
             st.dataframe(rows, use_container_width=True, hide_index=True)
-        except Exception as e:
-            st.write(similar)
-            st.caption(f"(could not join closed_cases_history.csv: {e})")
+        else:
+            # closed_cases_history.csv is intentionally not bundled with the
+            # deployed app (it's part of the raw provided dataset) - show the
+            # retrieved case IDs plainly rather than a raw list dump or a
+            # file-path error.
+            st.dataframe(
+                pd.DataFrame({"case_id": similar, "similarity rank": range(1, len(similar) + 1)}),
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption("Ranked by case-memory similarity, retrieved live from the graph.")
 
 # --- SAR -----------------------------------------------------------------
 with tabs[5]:
