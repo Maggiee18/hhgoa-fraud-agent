@@ -16,6 +16,26 @@ Trigger → Investigate → Gather evidence → Assess uncertainty
 
 This loop is implemented as an explicit LangGraph state graph in `agent/graph_agent.py`, with a bounded number of evidence-request rounds so the agent always terminates with a defensible action rather than looping forever on uncertainty.
 
+```mermaid
+flowchart TD
+    T[Trigger: risk score / customer report / analyst request] --> I[Investigate: open or reopen a FraudCase]
+    I --> G[Gather evidence: GSQL queries over TigerGraph]
+    G --> U{Assess uncertainty}
+    U -- evidence insufficient --> M[Request more evidence:\ncustomer validation, step-up auth,\nanalyst input]
+    M --> G
+    U -- evidence sufficient --> A[Select next-best action(s):\ndeterministic policy engine]
+    A --> E[Explain: evidence, uncertainty,\nreasoning, SAR if required]
+    E --> W[Write case back to TigerGraph\n+ update case memory]
+
+    subgraph Graph["TigerGraph Savanna"]
+        C[(Customer / Card / Transaction\nDeviceProfile / EmailDomain\nBillingRegion / FraudCase)]
+    end
+    G <--> Graph
+    W --> Graph
+    W --> Mem[(Case memory:\nTF-IDF similarity over\nhistorical + agent cases)]
+    Mem -.informs.-> G
+```
+
 ## Architecture
 
 | Layer | Where | What it does |
