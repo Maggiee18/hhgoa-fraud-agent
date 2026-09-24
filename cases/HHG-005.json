@@ -1,0 +1,101 @@
+{
+  "case_id": "HHG-005",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.6515,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3523199"
+    ],
+    "first_suspicious_txn_id": "T3523199",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "iOS Device"
+    ],
+    "exposure_usd": 100.07,
+    "evidence": [
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3523199"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3523199"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:1",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3523199"
+        ]
+      },
+      {
+        "claim": "Customer has 3 prior closed fraud cases (CC-2400, CC-2717, CC-2857), highlighting a history of prior compromise.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3523199"
+        ]
+      },
+      {
+        "claim": "Transaction utilizes mismatched email domains (p_email_domain: icloud.com vs r_email_domain: gmail.com).",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3523199"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-1099",
+      "CC-0823",
+      "CC-0539",
+      "CC-3105",
+      "CC-0117"
+    ],
+    "summary": "Transaction T3523199 ($100.07, online) was flagged by the real-time risk model at a score of 0.54 due to being initiated from a new device profile ('New' device key 5bb57df1480c, iOS Device running mobile safari 9.0). The customer profile (C02923) has substantial history with 92 prior transactions and three prior closed fraud cases (CC-2400, CC-2717, CC-2857), indicating historical vulnerability or frequent card re-issuance. Similar historical cases show a mix of confirmed fraud (e.g., CC-0823, CC-0117) and legitimate activity where the customer adopted a new phone (e.g., CC-3105). Given the moderate risk score and lack of direct contact response, the situation remains uncertain.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-005"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 7,
+  "tokens": 13293,
+  "latency_s": 5.24
+}

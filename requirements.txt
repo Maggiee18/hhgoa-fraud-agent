@@ -1,0 +1,41 @@
+# Core
+python-dotenv==1.0.1
+# mcp==1.27.0 (below) requires pydantic>=2.11, so this can't stay pinned to
+# 2.9.2 as originally written. Loosened; our own schemas (agent/schemas.py)
+# use only standard v2 BaseModel/Field, so any 2.11.x-3.0 release is fine.
+pydantic>=2.11,<3.0.0
+
+# Agent orchestration
+langgraph==0.2.45
+langchain-core==0.3.15
+
+# LLM providers (either works — see agent/llm.py; LLM_PROVIDER picks which)
+anthropic>=0.40
+google-genai>=1.0
+
+# Graph
+pyTigerGraph==2.0.4
+networkx==3.4.2
+
+# TigerGraph MCP — required component per the challenge brief. Used when
+# GRAPH_BACKEND=tigergraph_mcp (graph/tigergraph_mcp_backend.py). The
+# `tigergraph-mcp` server package pulls pyTigerGraph>=2.0.4 itself, which is
+# why the pin above was bumped from 1.8.0 (still has the sync
+# TigerGraphConnection class graph/tigergraph_backend.py uses directly).
+tigergraph-mcp==1.0.3
+mcp==1.27.0
+
+# Data
+pandas==2.2.3
+numpy==1.26.4
+
+# Case memory / embeddings (local TF-IDF, no external API or model download)
+scikit-learn==1.5.2
+
+# Dashboard
+streamlit==1.39.0
+pyvis==0.3.2
+plotly==5.24.1
+
+# Dev / test
+pytest==8.3.3

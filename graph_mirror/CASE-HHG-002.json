@@ -1,0 +1,28 @@
+{
+  "case_id": "CASE-HHG-002",
+  "case_source": "agent",
+  "status": "closed_legitimate",
+  "verdict": "legitimate",
+  "fraud_probability": 0.0,
+  "pattern": "card_not_present_fraud",
+  "pattern_description": "",
+  "exposure_usd": 0.0,
+  "opened_at": "2016-11-22 17:27:07",
+  "closed_at": "2016-11-22 17:27:07",
+  "summary": "Transaction T3478782 for $292.36 is an online purchase flagged by the real-time model with a risk score of 0.79. The customer has a prior closed fraud case (CC-4160), indicating historical vulnerability to unauthorized activity. No specific detector signals or device metadata were captured, leaving limited context on the device or location used. However, the moderate risk score and customer history warrant careful review.",
+  "analyst_notes": "Customer has a prior closed fraud case CC-4160; Missing device metadata and location features for transaction T3478782; Customer confirms they made this transaction.",
+  "report_filed": false,
+  "first_txn_id": "T3478782",
+  "txn_ids": [
+    "T3478782"
+  ],
+  "card_ids": [
+    "C11891-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [],
+  "summary_fields": {
+    "pattern": "card_not_present_fraud",
+    "exposure_usd": 0.0
+  }
+}

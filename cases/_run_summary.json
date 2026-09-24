@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "case_id": "HHG-001",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-002",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-003",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-004",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-005",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-006",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-007",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-008",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-009",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-010",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-011",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-012",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-013",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-014",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-015",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-016",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-017",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-018",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-019",
+      "status": "ok"
+    },
+    {
+      "case_id": "HHG-020",
+      "status": "ok"
+    }
+  ],
+  "total_s": 204.16005992889404
+}

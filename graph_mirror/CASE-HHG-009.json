@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-009",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 30.02,
+  "opened_at": "2016-12-28 12:10:53",
+  "closed_at": "2016-12-28 12:10:53",
+  "summary": "Customer C08299 reported an unrecognized online purchase of $30.02 on card C08299-K1 via transaction T3581141. The flagged transaction occurred on a new device (`0f3463829514`) using an online channel, matching patterns seen in prior card-not-present fraud involving new devices. Given the direct customer report and the presence of a new device key, the transaction is assessed as fraudulent.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:2; Transaction occurred on a new device key ('0f3463829514'); Direct customer dispute received regarding transaction T3581141",
+  "report_filed": false,
+  "first_txn_id": "T3581141",
+  "txn_ids": [
+    "T3581141"
+  ],
+  "card_ids": [
+    "C08299-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "0f3463829514"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 30.02
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-014",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 74.96,
+  "opened_at": "2016-11-22 16:11:00",
+  "closed_at": "2016-11-22 16:11:00",
+  "summary": "Transaction T3478561 on card C13487-K1 represents a card-not-present purchase conducted online using a newly encountered device profile (d60ce6b0f017) and an anonymous IP proxy. The transaction amount ($74.96) matches multiple historical confirmed fraud cases involving new devices. The customer has a mixed channel history, but the presence of an anonymous proxy and a brand new mobile device profile strongly points to unauthorized third-party usage.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: IP_PROXY:ANONYMOUS) \u2014 proxy rating is elevated; Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:2; Transaction utilized an anonymous IP proxy (IP_PROXY:ANONYMOUS).; Device profile is flagged as New for the account.; Exact transaction amount ($74.96) matches historical confirmed fraud cases (CC-0595, CC-0710, CC-2710).",
+  "report_filed": false,
+  "first_txn_id": "T3478561",
+  "txn_ids": [
+    "T3478561"
+  ],
+  "card_ids": [
+    "C13487-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "d60ce6b0f017"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 74.96
+  }
+}

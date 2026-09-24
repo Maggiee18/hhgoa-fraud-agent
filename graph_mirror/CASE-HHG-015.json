@@ -1,0 +1,34 @@
+{
+  "case_id": "CASE-HHG-015",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 0.816,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 599.94,
+  "opened_at": "2016-11-17 14:03:36",
+  "closed_at": "2016-11-17 14:03:36",
+  "summary": "Transaction T3464869 is an online purchase of $599.94 originating from a new device profile ('d8b0b65b1a98') using anonymous email domains for both purchaser and recipient. The customer has a history of prior closed fraud cases (CC-0615, CC-1313, CC-3886), indicating higher vulnerability. The combination of a new device, high risk score (0.77), and anonymous email domains strongly points toward unauthorized card-not-present fraud.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: not flagged); Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:2; Both purchaser and recipient email domains are anonymous.com; Customer has three prior closed fraud cases on file",
+  "report_filed": true,
+  "first_txn_id": "T3464869",
+  "txn_ids": [
+    "T3464869"
+  ],
+  "card_ids": [
+    "C03042-K1"
+  ],
+  "connected_card_ids": [
+    "C00681-K1",
+    "C05292-K1",
+    "C11413-K1"
+  ],
+  "device_keys": [
+    "d8b0b65b1a98"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 599.94
+  }
+}

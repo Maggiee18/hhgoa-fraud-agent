@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE-HHG-004",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 384.43,
+  "opened_at": "2016-12-29 01:53:54",
+  "closed_at": "2016-12-29 01:53:54",
+  "summary": "Customer C08106 reported an unrecognized online purchase of $128.33 (transaction T3583227) made via a new device profile. Detector signals indicate a cluster of 8 online transactions within 48 hours, with the flagged amount being significantly higher than the card's historical average of $35.09. The customer has a history of 4 prior closed fraud cases, supporting a high probability of account compromise. The transaction originated from a new desktop device using Firefox 47.0.",
+  "analyst_notes": "8 online transactions within 48h of the flagged one; amount $128.33 is 3.7x this card's average ($35.09); Transaction from a device profile marked New for this account (proxy: not flagged); Customer has 4 prior closed fraud cases indicating a recurring vulnerability to account compromise.; The flagged transaction amount of $128.33 is 3.7x higher than the customer's historical average amount of $35.09.; A burst of 8 online transactions occurred within a 48-hour window surrounding the disputed charge.",
+  "report_filed": true,
+  "first_txn_id": "T3580804",
+  "txn_ids": [
+    "T3580804",
+    "T3583227",
+    "T3583499",
+    "T3583503",
+    "T3584017",
+    "T3585446",
+    "T3585726",
+    "T3587858"
+  ],
+  "card_ids": [
+    "C08106-K1"
+  ],
+  "connected_card_ids": [
+    "C02222-K1",
+    "C03095-K2"
+  ],
+  "device_keys": [
+    "727f3486cccb"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 384.43
+  }
+}

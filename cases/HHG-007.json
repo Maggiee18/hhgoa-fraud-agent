@@ -1,0 +1,98 @@
+{
+  "case_id": "HHG-007",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.8,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3514948"
+    ],
+    "first_suspicious_txn_id": "T3514948",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 111.92,
+    "evidence": [
+      {
+        "claim": "Card-present purchase in billing region 264.0, which this card has 0 prior transaction(s) in out of 1 total",
+        "source": "graph",
+        "ref": "detector:out_of_region_use",
+        "entity_ids": [
+          "T3514948"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3514948"
+        ]
+      },
+      {
+        "claim": "3 match-flag(s) indicate mismatch (e.g. name/address)",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3514948"
+        ]
+      },
+      {
+        "claim": "Customer C09933 has 19 prior closed fraud cases on file, indicating recurring vulnerability.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3514948"
+        ]
+      },
+      {
+        "claim": "Billing region 264.0 has zero prior transactions for card C09933-K2 out of 1 total.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3514948"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2194",
+      "CC-5323",
+      "CC-3911",
+      "CC-0004"
+    ],
+    "summary": "Transaction T3514948 for $111.92 was flagged with a high risk score of 0.87 due to occurring in billing region 264.0, where this card has no prior history. The customer profile indicates extensive prior closed fraud cases (19 historical cases), suggesting high vulnerability to recurring compromise. Similar historical cases involving out-of-region card-present use consistently resulted in confirmed fraud. The combination of an entirely novel geographic region for this card and the customer's severe fraud history strongly supports a fraudulent classification.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-007"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 6,
+  "tokens": 18269,
+  "latency_s": 11.98
+}

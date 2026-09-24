@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-005",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 0.7515,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 100.07,
+  "opened_at": "2016-12-07 21:38:37",
+  "closed_at": "2016-12-07 21:38:37",
+  "summary": "Transaction T3523199 is an online purchase of $100.07 flagged with a risk score of 0.54, originating from a device profile marked as 'New' for customer C02923. The customer has a significant history with 92 prior transactions across both in-person and online channels, but also has 3 prior closed fraud cases on their profile (CC-2400, CC-2717, CC-2857). Similar historical cases involving new devices exhibit both confirmed fraud and legitimate purchases confirmed by cardholders. Given the new device indicator combined with prior history of closed cases, additional verification is warranted.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: not flagged); Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:1; Customer has 3 prior closed cases on profile; Transaction uses a new mobile device running iOS 9.3.5",
+  "report_filed": false,
+  "first_txn_id": "T3523199",
+  "txn_ids": [
+    "T3523199"
+  ],
+  "card_ids": [
+    "C02923-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "5bb57df1480c"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 100.07
+  }
+}

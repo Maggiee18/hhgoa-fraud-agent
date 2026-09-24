@@ -1,0 +1,215 @@
+// Installed GSQL queries backing the agent's tools. Install with:
+//   gsql graph/gsql/queries.gsql
+// (assumes graph/schema/schema.gsql has already run and USE GRAPH HHGOA_Fraud
+// is in effect — see scripts/setup_graph.py, which runs both in order.)
+
+USE GRAPH HHGOA_Fraud
+
+// 1. Everything about one transaction: the txn itself, its card, customer,
+//    device, email domains, billing region. The single most-called tool.
+CREATE OR REPLACE QUERY get_transaction_details(STRING p_txn_id) FOR GRAPH HHGOA_Fraud {
+    SetAccum<EDGE> @@edges;
+    Txn = {Transaction.*};
+    Txn = SELECT t FROM Txn:t WHERE t.txn_id == p_txn_id;
+    Card_ = SELECT c FROM Txn:t -(reverse_MADE:e)- Card:c;
+    Cust = SELECT cu FROM Card_:c -(reverse_OWNS:e)- Customer:cu;
+    Dev = SELECT d FROM Txn:t -(FROM_DEVICE:e)- DeviceProfile:d;
+    Region = SELECT r FROM Txn:t -(BILLED_IN:e)- BillingRegion:r;
+    PEmail = SELECT em FROM Txn:t -(PURCHASER_EMAIL:e)- EmailDomain:em;
+    PRINT Txn, Card_, Cust, Dev, Region, PEmail;
+}
+
+// 2. All transactions on a card, chronologically, optionally windowed
+//    around a reference transaction's timestamp. Powers R5 (card testing
+//    velocity) and general history review.
+CREATE OR REPLACE QUERY get_card_window(STRING p_card_id, STRING p_center_txn_id, INT p_window_minutes) FOR GRAPH HHGOA_Fraud {
+    // No .first() method on a vertex set in this GSQL version (TYP-1002:
+    // "Function name 'first' does not match any existing functions") — a
+    // global accumulator is the standard way to pull a scalar out of a
+    // (0-or-1-row) SELECT result.
+    MaxAccum<DATETIME> @@center_ts;
+    Center = {Transaction.*};
+    Center = SELECT t FROM Center:t WHERE t.txn_id == p_center_txn_id
+             ACCUM @@center_ts += t.ts;
+    IF Center.size() == 0 THEN
+        @@center_ts += to_datetime("1970-01-01 00:00:00");
+    END;
+
+    Card_ = {Card.*};
+    Card_ = SELECT c FROM Card_:c WHERE c.card_id == p_card_id;
+    AllTxns = SELECT t FROM Card_:c -(MADE:e)- Transaction:t
+              ORDER BY t.ts ASC;
+    Windowed = SELECT t FROM AllTxns:t
+               WHERE p_window_minutes == 0
+                  OR datetime_diff(t.ts, @@center_ts) BETWEEN -1*p_window_minutes*60 AND p_window_minutes*60;
+    PRINT AllTxns, Windowed;
+}
+
+// 3. A customer's full profile: cards, transaction counts, historical
+//    cases already on file for them.
+CREATE OR REPLACE QUERY get_customer_profile(STRING p_customer_id) FOR GRAPH HHGOA_Fraud {
+    // channels_used/total_amt are needed by detect_account_takeover
+    // (agent/detectors.py) — multi-channel history is one of its two
+    // signals. Accumulated here so the agent doesn't need a second
+    // round-trip just to read Transaction.channel per card.
+    SetAccum<STRING> @@channels;
+    SumAccum<DOUBLE> @@total_amt;
+    Cust = {Customer.*};
+    Cust = SELECT cu FROM Cust:cu WHERE cu.customer_id == p_customer_id;
+    Cards = SELECT c FROM Cust:cu -(OWNS:e)- Card:c;
+    Txns = SELECT t FROM Cards:c -(MADE:e)- Transaction:t
+           ACCUM @@channels += t.channel, @@total_amt += t.amt;
+    Cases = SELECT ca FROM Cards:c -(reverse_ON_CARD:e)- FraudCase:ca;
+    PRINT Cust, Cards, Txns.size() AS txn_count, Cases, @@channels AS channels_used, @@total_amt AS total_amt;
+}
+
+// 4. Other cards/customers/cases sharing a device profile — the core
+//    "devices connect people" tool (R6, patterns 3 and 5).
+CREATE OR REPLACE QUERY get_device_neighbors(STRING p_device_key) FOR GRAPH HHGOA_Fraud {
+    Dev = {DeviceProfile.*};
+    Dev = SELECT d FROM Dev:d WHERE d.device_key == p_device_key;
+    Txns = SELECT t FROM Dev:d -(reverse_FROM_DEVICE:e)- Transaction:t;
+    Cards = SELECT c FROM Txns:t -(reverse_MADE:e)- Card:c;
+    Customers = SELECT cu FROM Cards:c -(reverse_OWNS:e)- Customer:cu;
+    PastCases = SELECT ca FROM Dev:d -(reverse_CASE_DEVICE:e)- FraudCase:ca;
+    PRINT Dev, Cards, Customers, PastCases, Txns.size() AS txn_count;
+}
+
+// 5. Other cards billed in the same region within a time window — powers
+//    out-of-region-use (pattern 4) and R6 region-cluster checks.
+CREATE OR REPLACE QUERY get_region_cluster(STRING p_region_code, DATETIME p_from, DATETIME p_to) FOR GRAPH HHGOA_Fraud {
+    Region = {BillingRegion.*};
+    Region = SELECT r FROM Region:r WHERE r.region_code == p_region_code;
+    Txns = SELECT t FROM Region:r -(reverse_BILLED_IN:e)- Transaction:t
+           WHERE t.ts BETWEEN p_from AND p_to;
+    Cards = SELECT c FROM Txns:t -(reverse_MADE:e)- Card:c;
+    PRINT Region, Cards, Txns;
+}
+
+// 6. A card's normal billing-region history (to tell "trip" from "clone" —
+//    pattern 4 explicitly warns: several days in one new region is a trip).
+CREATE OR REPLACE QUERY get_card_region_history(STRING p_card_id) FOR GRAPH HHGOA_Fraud {
+    SumAccum<INT> @txn_count;  // per-vertex accumulator must be declared before use in ACCUM below
+    Card_ = {Card.*};
+    Card_ = SELECT c FROM Card_:c WHERE c.card_id == p_card_id;
+    Txns = SELECT t FROM Card_:c -(MADE:e)- Transaction:t;
+    Regions = SELECT r FROM Txns:t -(BILLED_IN:e)- BillingRegion:r
+              ACCUM r.@txn_count += 1;
+    PRINT Regions[Regions.region_code, Regions.@txn_count];
+}
+
+// 7. Other cards/cases sharing a recipient/purchaser email domain.
+CREATE OR REPLACE QUERY get_email_neighbors(STRING p_domain) FOR GRAPH HHGOA_Fraud {
+    Dom = {EmailDomain.*};
+    Dom = SELECT e FROM Dom:e WHERE e.domain == p_domain;
+    Txns = SELECT t FROM Dom:e -(reverse_PURCHASER_EMAIL:e2)- Transaction:t;
+    Cards = SELECT c FROM Txns:t -(reverse_MADE:e)- Card:c;
+    PRINT Dom, Cards, Txns.size() AS txn_count;
+}
+
+// 8. Velocity check: count + total of a card's transactions in the last N
+//    hours before a reference transaction (R5 needs "3+ small txns within
+//    an hour").
+CREATE OR REPLACE QUERY get_velocity(STRING p_card_id, STRING p_center_txn_id, INT p_hours) FOR GRAPH HHGOA_Fraud {
+    MaxAccum<DATETIME> @@center_ts;  // see get_card_window's note on why not .first()
+    SumAccum<DOUBLE> @@total_amt;
+    Center = {Transaction.*};
+    Center = SELECT t FROM Center:t WHERE t.txn_id == p_center_txn_id
+             ACCUM @@center_ts += t.ts;
+    IF Center.size() == 0 THEN
+        @@center_ts += to_datetime("1970-01-01 00:00:00");
+    END;
+
+    Card_ = {Card.*};
+    Card_ = SELECT c FROM Card_:c WHERE c.card_id == p_card_id;
+    // sum(Recent.amt) inline in PRINT isn't supported under JSON API v2
+    // (SEM-1420) — accumulate it during the SELECT instead, same pattern
+    // get_customer_profile already uses successfully for @@total_amt.
+    Recent = SELECT t FROM Card_:c -(MADE:e)- Transaction:t
+             WHERE datetime_diff(@@center_ts, t.ts) BETWEEN 0 AND p_hours*3600
+             ACCUM @@total_amt += t.amt
+             ORDER BY t.ts ASC;
+    PRINT Recent, Recent.size() AS txn_count, @@total_amt AS total_amt;
+}
+
+// 9. Retrieve similar historical cases (case memory) by cosine similarity
+//    on the embedding vector computed client-side and passed in. Native
+//    vector search (if the target Savanna/CE version's vector index is
+//    enabled) can replace this with an ANN index lookup — see
+//    docs/DECISIONS.md. This version is portable to any TigerGraph 3.x/4.x
+//    instance without a vector-search add-on.
+CREATE OR REPLACE QUERY find_similar_cases(LIST<DOUBLE> p_embedding, INT p_top_k, STRING p_case_source_filter) FOR GRAPH HHGOA_Fraud {
+    TYPEDEF TUPLE<STRING case_id, DOUBLE score> ScoredCase;
+    HeapAccum<ScoredCase>(p_top_k, score DESC) @@top;
+    // A LIST-typed query PARAMETER can't have methods called on it directly
+    // (TYP-1001), and a plain "LIST<DOUBLE> var" local variable declaration
+    // doesn't parse either — composite types are only valid as
+    // parameter/attribute types here, not local variables ("no viable
+    // alternative at input 'LIST<double> emb'"). FOREACH...IN is iteration
+    // syntax, not a method call, so it sidesteps the restriction; copying
+    // into a ListAccum gives back something .size()/.get() work on normally.
+    ListAccum<DOUBLE> @@emb;
+    FOREACH v IN p_embedding DO
+        @@emb += v;
+    END;
+    INT dim = @@emb.size();
+
+    Cases = {FraudCase.*};
+    Cases = SELECT ca FROM Cases:ca
+            WHERE p_case_source_filter == "" OR ca.case_source == p_case_source_filter;
+    Cases = SELECT ca FROM Cases:ca
+            WHERE ca.embedding.size() == dim
+            ACCUM
+                // Each local var needs its own explicit type keyword — the
+                // "DOUBLE a = 0, b = 0, c = 0" comma-shorthand parses but left
+                // na/nb out of scope by the time they were read below
+                // (TYP-523: "An undefined variable na in current scope").
+                DOUBLE dot = 0,
+                DOUBLE na = 0,
+                DOUBLE nb = 0,
+                FOREACH i IN RANGE[0, dim-1] DO
+                    dot = dot + ca.embedding.get(i) * @@emb.get(i),
+                    na = na + ca.embedding.get(i) * ca.embedding.get(i),
+                    nb = nb + @@emb.get(i) * @@emb.get(i)
+                END,
+                // (na == 0 or nb == 0) collapses sim to ~0 through the epsilon below —
+                // GSQL has no ternary operator, so this avoids a div-by-zero branch instead.
+                DOUBLE sim = dot / (sqrt(na) * sqrt(nb) + 0.0000001),
+                @@top += ScoredCase(ca.case_id, sim);
+    PRINT @@top;
+}
+
+// 10. Upsert a case + its edges to Transaction/Card/DeviceProfile — how the
+//     agent writes its own investigation into the graph as memory for the
+//     next one (README: "write it into the graph too").
+CREATE OR REPLACE QUERY upsert_case(
+    STRING p_case_id, STRING p_case_source, STRING p_status, STRING p_verdict,
+    DOUBLE p_fraud_probability, STRING p_pattern, STRING p_pattern_description,
+    DOUBLE p_exposure_usd, DATETIME p_opened_at, DATETIME p_closed_at,
+    STRING p_summary, STRING p_analyst_notes, BOOL p_report_filed, STRING p_first_txn_id,
+    LIST<DOUBLE> p_embedding,
+    SET<STRING> p_txn_ids, SET<STRING> p_card_ids, SET<STRING> p_connected_card_ids,
+    SET<STRING> p_device_keys
+) FOR GRAPH HHGOA_Fraud {
+    INSERT INTO FraudCase VALUES (
+        p_case_id, p_case_source, p_status, p_verdict, p_fraud_probability,
+        p_pattern, p_pattern_description, p_exposure_usd, p_opened_at, p_closed_at,
+        p_summary, p_analyst_notes, p_report_filed, p_first_txn_id, p_embedding
+    );
+    FOREACH tid IN p_txn_ids DO
+        INSERT INTO INVOLVES VALUES (p_case_id, tid);
+    END;
+    FOREACH cid IN p_card_ids DO
+        INSERT INTO ON_CARD VALUES (p_case_id, cid);
+    END;
+    FOREACH cid IN p_connected_card_ids DO
+        INSERT INTO CONNECTED_TO VALUES (p_case_id, cid);
+    END;
+    FOREACH dk IN p_device_keys DO
+        INSERT INTO CASE_DEVICE VALUES (p_case_id, dk);
+    END;
+}
+
+INSTALL QUERY get_transaction_details, get_card_window, get_customer_profile,
+    get_device_neighbors, get_region_cluster, get_card_region_history,
+    get_email_neighbors, get_velocity, find_similar_cases, upsert_case

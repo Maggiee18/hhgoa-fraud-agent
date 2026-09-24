@@ -1,0 +1,129 @@
+{
+  "case_id": "HHG-001",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.711,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3514030"
+    ],
+    "first_suspicious_txn_id": "T3514030",
+    "connected_card_ids": [
+      "C06121-K1",
+      "C08477-K1",
+      "C09092-K1",
+      "C11915-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 77.07,
+    "evidence": [
+      {
+        "claim": "Card-present purchase in billing region 444.0, which this card has 0 prior transaction(s) in out of 1 total",
+        "source": "graph",
+        "ref": "detector:out_of_region_use",
+        "entity_ids": [
+          "T3514030"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3514030"
+        ]
+      },
+      {
+        "claim": "1 match-flag(s) indicate mismatch (e.g. name/address)",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3514030"
+        ]
+      },
+      {
+        "claim": "Customer has 4 prior closed fraud cases on record, indicating historical vulnerability.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3514030"
+        ]
+      },
+      {
+        "claim": "Amount of $77.07 closely aligns with prior confirmed fraud cases in the $77.00-$77.03 range.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3514030"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-3962",
+      "CC-2040",
+      "CC-2923",
+      "CC-0586",
+      "CC-4720"
+    ],
+    "summary": "Transaction T3514030 for $77.07 was flagged due to out-of-region card-present use in billing region 444.0, where card C12382-K1 has no prior transaction history. The customer profile shows a high transaction volume (422 prior transactions) and a history of 4 prior closed fraud cases, indicating heightened vulnerability or repeat targeting. Similar historical cases involving out-of-region use and matching amounts ($77.00 range) were confirmed as fraudulent. The transaction shows moderate risk scores and matches known patterns of regional anomalies.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-001"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (billing region 444.0) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — billing region 444.0"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing billing region 444.0"
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (billing region 444.0) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — billing region 444.0"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing billing region 444.0"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Policy rule triggered FILE_REPORT — see rules_applied.",
+    "narrative": "This Suspicious Activity Report is filed regarding customer C12382 and card C12382-K1 due to suspicious out-of-region card-present activity. On 2016-12-04, a card-present purchase totaling $77.07 (transaction ID T3514030) occurred in billing region 444.0, representing the first transaction in this region out of one total for the card. The customer's history spans both in-person and online channels, and there is one match-flag indicating a mismatch, such as name or address. Additionally, the customer has four prior closed fraud cases on record, indicating historical vulnerability. The transaction amount of $77.07 closely aligns with prior confirmed fraud cases in the $77.00 to $77.03 range. Furthermore, the activity is connected to multiple other card IDs including C06121-K1, C08477-K1, C09092-K1, and C11915-K1. There is no recorded customer response to the activity.",
+    "subjects": [
+      "C12382"
+    ],
+    "total_amount_usd": 77.07,
+    "activity_dates": [
+      "2016-12-04",
+      "2016-12-04"
+    ]
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 6,
+  "tokens": 5513,
+  "latency_s": 10.75
+}

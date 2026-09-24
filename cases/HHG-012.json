@@ -1,0 +1,98 @@
+{
+  "case_id": "HHG-012",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.702,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3553342"
+    ],
+    "first_suspicious_txn_id": "T3553342",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 30.91,
+    "evidence": [
+      {
+        "claim": "Card-present purchase in billing region 494.0, which this card has 0 prior transaction(s) in out of 1 total",
+        "source": "graph",
+        "ref": "detector:out_of_region_use",
+        "entity_ids": [
+          "T3553342"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3553342"
+        ]
+      },
+      {
+        "claim": "1 match-flag(s) indicate mismatch (e.g. name/address)",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3553342"
+        ]
+      },
+      {
+        "claim": "Customer C05876 has prior closed fraud cases CC-0003 and CC-2370.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3553342"
+        ]
+      },
+      {
+        "claim": "Card C05876-K2 has zero prior transactions in billing region 494.0.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3553342"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2782",
+      "CC-1463",
+      "CC-4565",
+      "CC-5489"
+    ],
+    "summary": "Transaction T3553342 for $30.91 was flagged due to being a card-present purchase in billing region 494.0, where card C05876-K2 has no prior history out of 1 total transaction. The customer profile shows a high transaction volume (991 transactions) and prior closed fraud cases (CC-0003, CC-2370), indicating historical vulnerability. Similar historical cases involving out-of-region card-present use (such as CC-2782 and CC-1463) confirm this pattern of fraudulent behavior. Given the lack of geographic history for this specific card and matching historical fraud profiles, the activity is deemed fraudulent.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-012"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 6,
+  "tokens": 32171,
+  "latency_s": 7.0
+}

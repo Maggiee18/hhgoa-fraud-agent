@@ -1,0 +1,33 @@
+{
+  "case_id": "CASE-HHG-001",
+  "case_source": "agent",
+  "status": "open",
+  "verdict": "uncertain",
+  "fraud_probability": 0.5515,
+  "pattern": "account_takeover",
+  "pattern_description": "",
+  "exposure_usd": 77.07,
+  "opened_at": "2016-12-04 19:55:28",
+  "closed_at": "2016-12-04 19:55:28",
+  "summary": "Transaction T3514030 for $77.07 was flagged by the real-time model with a risk score of 0.61. The customer profile shows a significant history of prior closed fraud cases (CC-1066, CC-1673, CC-2964, CC-3587), indicating ongoing vulnerability on this account. Similar historical cases align with account takeover patterns involving mixed-channel activity and name/address mismatches. Given the detector signals and historical context, the transaction is evaluated as likely fraudulent.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; 1 match-flag(s) indicate mismatch (e.g. name/address); Customer has 4 prior closed fraud cases on record; Mixed-channel usage detected across in-person and online channels",
+  "report_filed": true,
+  "first_txn_id": "T3514030",
+  "txn_ids": [
+    "T3514030"
+  ],
+  "card_ids": [
+    "C12382-K1"
+  ],
+  "connected_card_ids": [
+    "C06121-K1",
+    "C08477-K1",
+    "C09092-K1",
+    "C11915-K1"
+  ],
+  "device_keys": [],
+  "summary_fields": {
+    "pattern": "account_takeover",
+    "exposure_usd": 77.07
+  }
+}

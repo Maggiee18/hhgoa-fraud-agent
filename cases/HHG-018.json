@@ -1,0 +1,99 @@
+{
+  "case_id": "HHG-018",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3491361"
+    ],
+    "first_suspicious_txn_id": "T3491361",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 39.08,
+    "evidence": [
+      {
+        "claim": "Card-present purchase in billing region 126.0, which this card has 0 prior transaction(s) in out of 1 total",
+        "source": "graph",
+        "ref": "detector:out_of_region_use",
+        "entity_ids": [
+          "T3491361"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3491361"
+        ]
+      },
+      {
+        "claim": "4 match-flag(s) indicate mismatch (e.g. name/address)",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3491361"
+        ]
+      },
+      {
+        "claim": "Customer explicitly disputes transaction T3491361.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3491361"
+        ]
+      },
+      {
+        "claim": "Multiple historical cases (e.g., CC-4626, CC-2188) show identical small-dollar out-of-region card-present fraud patterns.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3491361"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-4626",
+      "CC-2188",
+      "CC-2632",
+      "CC-2658",
+      "CC-4742"
+    ],
+    "summary": "Customer C02354 reported an unrecognized $39.08 in-person transaction (T3491361) on their card. The transaction occurred in a billing region (126.0) where the card had no prior transaction history. Historical cases with extremely similar transaction amounts and out-of-region card-present profiles were confirmed as fraudulent. Given the direct customer dispute and matching historical fraud signatures, this transaction is verified as fraudulent.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-018"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 1.00 is decisive and supported by 3 independent pieces of evidence.",
+  "tool_calls": 6,
+  "tokens": 46147,
+  "latency_s": 13.86
+}

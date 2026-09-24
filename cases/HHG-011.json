@@ -1,0 +1,294 @@
+{
+  "case_id": "HHG-011",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3578405",
+      "T3578451",
+      "T3578471",
+      "T3578475",
+      "T3578483",
+      "T3578486",
+      "T3578491",
+      "T3578496",
+      "T3578506",
+      "T3578817",
+      "T3578995",
+      "T3578997",
+      "T3579400",
+      "T3579407",
+      "T3579576",
+      "T3579597",
+      "T3580137",
+      "T3580202",
+      "T3580219",
+      "T3580232",
+      "T3580348",
+      "T3580380",
+      "T3580403",
+      "T3580417",
+      "T3580427",
+      "T3580478",
+      "T3580544",
+      "T3580712",
+      "T3580765",
+      "T3580776",
+      "T3580815",
+      "T3580821",
+      "T3580907",
+      "T3580933",
+      "T3580951",
+      "T3580992",
+      "T3581048",
+      "T3581345",
+      "T3582082",
+      "T3582107",
+      "T3582142",
+      "T3582175",
+      "T3582178",
+      "T3582327",
+      "T3582338",
+      "T3582375",
+      "T3582413",
+      "T3582602",
+      "T3582624",
+      "T3582671",
+      "T3582738",
+      "T3582868",
+      "T3582897",
+      "T3583101",
+      "T3583140",
+      "T3583199",
+      "T3583229",
+      "T3583348",
+      "T3583368",
+      "T3583406",
+      "T3583411",
+      "T3583415",
+      "T3583417",
+      "T3583435",
+      "T3583494",
+      "T3583644",
+      "T3583670",
+      "T3583866",
+      "T3583914",
+      "T3583968",
+      "T3584003",
+      "T3584153",
+      "T3584155",
+      "T3584401",
+      "T3584460",
+      "T3584516",
+      "T3584693",
+      "T3584706",
+      "T3584859",
+      "T3584962",
+      "T3584985",
+      "T3585055",
+      "T3585064",
+      "T3585345"
+    ],
+    "first_suspicious_txn_id": "T3578405",
+    "connected_card_ids": [
+      "C05595-K1",
+      "C05678-K1"
+    ],
+    "connected_device_profiles": [
+      "SM-G610F Build/NRD90M"
+    ],
+    "exposure_usd": 3984.8,
+    "evidence": [
+      {
+        "claim": "84 online transactions within 48h of the flagged one; amount $131.30 is 3.3x this card's average ($39.46)",
+        "source": "graph",
+        "ref": "detector:card_not_present_fraud",
+        "entity_ids": [
+          "T3578405",
+          "T3578451",
+          "T3578471",
+          "T3578475",
+          "T3578483",
+          "T3578486",
+          "T3578491",
+          "T3578496",
+          "T3578506",
+          "T3578817",
+          "T3578995",
+          "T3578997",
+          "T3579400",
+          "T3579407",
+          "T3579576",
+          "T3579597",
+          "T3580137",
+          "T3580202",
+          "T3580219",
+          "T3580232",
+          "T3580348",
+          "T3580380",
+          "T3580403",
+          "T3580417",
+          "T3580427",
+          "T3580478",
+          "T3580544",
+          "T3580712",
+          "T3580765",
+          "T3580776",
+          "T3580815",
+          "T3580821",
+          "T3580907",
+          "T3580933",
+          "T3580951",
+          "T3580992",
+          "T3581048",
+          "T3581345",
+          "T3582082",
+          "T3582107",
+          "T3582142",
+          "T3582175",
+          "T3582178",
+          "T3582327",
+          "T3582338",
+          "T3582375",
+          "T3582413",
+          "T3582602",
+          "T3582624",
+          "T3582671",
+          "T3582738",
+          "T3582868",
+          "T3582897",
+          "T3583101",
+          "T3583140",
+          "T3583199",
+          "T3583229",
+          "T3583348",
+          "T3583368",
+          "T3583406",
+          "T3583411",
+          "T3583415",
+          "T3583417",
+          "T3583435",
+          "T3583494",
+          "T3583644",
+          "T3583670",
+          "T3583866",
+          "T3583914",
+          "T3583968",
+          "T3584003",
+          "T3584153",
+          "T3584155",
+          "T3584401",
+          "T3584460",
+          "T3584516",
+          "T3584693",
+          "T3584706",
+          "T3584859",
+          "T3584962",
+          "T3584985",
+          "T3585055",
+          "T3585064",
+          "T3585345"
+        ]
+      },
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3583368"
+        ]
+      },
+      {
+        "claim": "Customer has 11 prior closed fraud cases on record",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3583368"
+        ]
+      },
+      {
+        "claim": "84 online transactions occurred within a 48-hour window around the flagged transaction",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3583368"
+        ]
+      },
+      {
+        "claim": "Flagged transaction amount ($131.30) is 3.3x the card's average amount ($39.46)",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3583368"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2813",
+      "CC-1481",
+      "CC-1467",
+      "CC-5536"
+    ],
+    "summary": "Customer C11923 reported an unauthorized online purchase of $131.30 (txn T3583368) made on 2016-12-29 from a newly registered mobile device using Chrome 66.0 for Android. Detector signals reveal a high volume of online transactions (84 within 48 hours of the flagged one) and multiple prior closed fraud cases on the customer profile (CC-3039, CC-3905, CC-4501, etc.), suggesting severe vulnerability or compromise. The amount is 3.3x the card's average, reinforcing the anomaly.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-011"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (device profile 72dd6d2c8096) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — device profile 72dd6d2c8096"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing device profile 72dd6d2c8096"
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (device profile 72dd6d2c8096) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — device profile 72dd6d2c8096"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing device profile 72dd6d2c8096"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Policy rule triggered FILE_REPORT — see rules_applied.",
+    "narrative": "This Suspicious Activity Report is filed regarding customer C11923, who exhibited suspicious card-not-present activity involving a new device profile. Specifically, card ID C11923-K2 was utilized in a pattern of 84 online transactions that occurred within a 48-hour window between December 27, 2016, and December 29, 2016. The affected transaction IDs include T3578405 through T3585064, resulting in a total exposure of $3,984.80. A flagged transaction amount of $131.30 was identified, which is 3.3 times this card's average transaction amount of $39.46. Furthermore, the activity originated from a device profile marked as new for this account. Review of the customer profile indicates that customer C11923 has 11 prior closed fraud cases on record. Additionally, connected card IDs C05595-K1 and C05678-K1 are associated with the customer. No customer response was obtained regarding the suspicious activity.",
+    "subjects": [
+      "C11923"
+    ],
+    "total_amount_usd": 3984.800000000001,
+    "activity_dates": [
+      "2016-12-27",
+      "2016-12-29"
+    ]
+  },
+  "stop_reason": "Fraud probability 1.00 is decisive and supported by 3 independent pieces of evidence.",
+  "tool_calls": 6,
+  "tokens": 58223,
+  "latency_s": 36.21
+}

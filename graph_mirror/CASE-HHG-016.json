@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-016",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 59.67,
+  "opened_at": "2016-12-11 22:39:08",
+  "closed_at": "2016-12-11 22:39:08",
+  "summary": "Customer C09988 reported an unrecognized online purchase of $59.67 (transaction T3534820) made on 2016-12-11. The transaction originated from a new desktop device using Edge 16.0 on Windows with a Hotmail email domain. The detector signal correctly identified this as card_not_present_new_device fraud given the customer's direct dispute. With a deterministic base probability of 1.0 based on the customer report, the activity is classified as confirmed fraud.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: not flagged); Customer C09988 directly disputed transaction T3534820 via customer message.; Transaction occurred from a new device key (3bec76e630ef) running Windows and Edge 16.0.; Customer has 61 prior transactions totaling $2550.57 entirely within the online channel.",
+  "report_filed": false,
+  "first_txn_id": "T3534820",
+  "txn_ids": [
+    "T3534820"
+  ],
+  "card_ids": [
+    "C09988-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "3bec76e630ef"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 59.67
+  }
+}

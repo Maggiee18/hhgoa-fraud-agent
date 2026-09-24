@@ -1,0 +1,115 @@
+{
+  "case_id": "HHG-006",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3476602",
+      "T3476633",
+      "T3476665",
+      "T3476682"
+    ],
+    "first_suspicious_txn_id": "T3476682",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Trident/7.0"
+    ],
+    "exposure_usd": 1906.07,
+    "evidence": [
+      {
+        "claim": "4 online transactions within 48h of the flagged one; amount $482.12 is 4.5x this card's average ($106.77)",
+        "source": "graph",
+        "ref": "detector:card_not_present_fraud",
+        "entity_ids": [
+          "T3476602",
+          "T3476633",
+          "T3476665",
+          "T3476682"
+        ]
+      },
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3476682"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3476682"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:2",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3476682"
+        ]
+      },
+      {
+        "claim": "Flagged transaction amount of $482.12 is significantly higher than the card's $106.77 average",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3476682"
+        ]
+      },
+      {
+        "claim": "Transaction executed from a newly registered device key f302e7e9cc20",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3476682"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-3397",
+      "CC-4776",
+      "CC-0418",
+      "CC-2014",
+      "CC-1482"
+    ],
+    "summary": "Customer C07297 reported an unrecognized $482.12 online transaction (T3476682) made on 2016-11-21. The purchase occurred via an online channel using a device profile marked as 'New' for the account (device key f302e7e9cc20, Windows 7, IE 11). Furthermore, the transaction amount is 4.5 times higher than the card's historical average of $106.77. Given the direct customer dispute and the presence of a novel device profile executing above-average transaction amounts, the transaction is assessed as fraudulent.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-006"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 1.00 is decisive and supported by 4 independent pieces of evidence.",
+  "tool_calls": 7,
+  "tokens": 15840,
+  "latency_s": 10.85
+}

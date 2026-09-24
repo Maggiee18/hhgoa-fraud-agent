@@ -1,0 +1,81 @@
+{
+  "case_id": "HHG-008",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3558054"
+    ],
+    "first_suspicious_txn_id": "T3558054",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 55.68,
+    "evidence": [
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3558054"
+        ]
+      },
+      {
+        "claim": "Transaction T3558054 was executed via online channel using a desktop device marked as New.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3558054"
+        ]
+      },
+      {
+        "claim": "Customer C13171 has an extensive history of prior closed cases (19 prior cases noted).",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3558054"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-4289",
+      "CC-2615",
+      "CC-0991"
+    ],
+    "summary": "Customer C13171 reported an unauthorized online purchase of $55.68 on transaction T3558054 made on 2016-12-19 via desktop chrome 66.0. The detector signals indicate the transaction occurred from a new device profile ('New' device key f7b3887f9e33). The customer profile shows a high history of prior closed cases, reinforcing vulnerability to compromise. The customer's direct report combined with the new device usage confirms the card_not_present_new_device pattern.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-008"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 1.00 is decisive and supported by 2 independent pieces of evidence.",
+  "tool_calls": 6,
+  "tokens": 20399,
+  "latency_s": 7.35
+}

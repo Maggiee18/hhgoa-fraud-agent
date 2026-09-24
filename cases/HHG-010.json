@@ -1,0 +1,101 @@
+{
+  "case_id": "HHG-010",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.575,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3506725"
+    ],
+    "first_suspicious_txn_id": "T3506725",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Windows"
+    ],
+    "exposure_usd": 1000.03,
+    "evidence": [
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3506725"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:2",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3506725"
+        ]
+      },
+      {
+        "claim": "Device key 3318e3e0de60 is new/not previously seen on this account",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3506725"
+        ]
+      },
+      {
+        "claim": "Both purchaser and recipient email domains are anonymous.com",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3506725"
+        ]
+      },
+      {
+        "claim": "Customer has a prior closed fraud case CC-0873",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3506725"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-4410",
+      "CC-1659",
+      "CC-0052",
+      "CC-1928",
+      "CC-2799"
+    ],
+    "summary": "Transaction T3506725 for $1,000.03 was flagged by the real-time model with a high risk score of 0.90. The purchase was made online using a new device key ('3318e3e0de60') that has not been previously seen on customer C10434's account. Furthermore, the transaction utilizes anonymous email domains ('anonymous.com') for both purchase and recipient email domains, which significantly increases fraud risk. The customer profile indicates prior closed cases (CC-0873), suggesting historical vulnerability or suspicious activity on the account.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-010"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: verdict uncertain and exposure exceeds $500"
+      }
+    ],
+    "final": [
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: verdict uncertain and exposure exceeds $500"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 7,
+  "tokens": 25144,
+  "latency_s": 12.62
+}

@@ -1,0 +1,99 @@
+{
+  "case_id": "HHG-003",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3530164"
+    ],
+    "first_suspicious_txn_id": "T3530164",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 49.0,
+    "evidence": [
+      {
+        "claim": "Card-present purchase in billing region 330.0, which this card has 0 prior transaction(s) in out of 1 total",
+        "source": "graph",
+        "ref": "detector:out_of_region_use",
+        "entity_ids": [
+          "T3530164"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3530164"
+        ]
+      },
+      {
+        "claim": "3 match-flag(s) indicate mismatch (e.g. name/address)",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3530164"
+        ]
+      },
+      {
+        "claim": "Customer C08623 has 6 prior closed fraud cases in their history.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3530164"
+        ]
+      },
+      {
+        "claim": "Transaction T3530164 is the first time this card was used in billing region 330.0.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3530164"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-5534",
+      "CC-3257",
+      "CC-4502",
+      "CC-0532",
+      "CC-0742"
+    ],
+    "summary": "Customer C08623 reported an unrecognized $49.00 in-person purchase on transaction T3530164, occurring in billing region 330.0 where this card has no prior transaction history. The customer profile indicates a history of multiple prior closed fraud cases (6 total), supporting the likelihood of compromised card details being used externally. Similar historical cases align with this pattern of isolated out-of-region card-present fraud while the customer retains the card. The deterministic model assigns a base probability of 1.0 due to the direct customer report.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-003"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 1.00 is decisive and supported by 3 independent pieces of evidence.",
+  "tool_calls": 6,
+  "tokens": 7601,
+  "latency_s": 7.1
+}

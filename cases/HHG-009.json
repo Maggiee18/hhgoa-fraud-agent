@@ -1,0 +1,99 @@
+{
+  "case_id": "HHG-009",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 1.0,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3581141"
+    ],
+    "first_suspicious_txn_id": "T3581141",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 30.02,
+    "evidence": [
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3581141"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:2",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3581141"
+        ]
+      },
+      {
+        "claim": "Flagged transaction T3581141 was executed on a new device ('0f3463829514') flagged as 'Found' by device tracking.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3581141"
+        ]
+      },
+      {
+        "claim": "The transaction utilized an online product code ('S') and a gmail.com email domain.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3581141"
+        ]
+      },
+      {
+        "claim": "Customer C08299 explicitly stated via message: 'I never made this $30.02 purchase.'",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3581141"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-4337",
+      "CC-2934",
+      "CC-1867",
+      "CC-0273",
+      "CC-5347"
+    ],
+    "summary": "Customer C08299 contacted the bank to report an unrecognized online purchase of $30.02 (transaction T3581141) made on December 28, 2016. The flagged transaction occurred on a new device key ('0f3463829514') using an online channel (product code S) with a Gmail email domain. Given the direct customer report disputing the charge and the presence of a new device, the transaction is verified as fraudulent.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-009"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 1.00 is decisive and supported by 2 independent pieces of evidence.",
+  "tool_calls": 7,
+  "tokens": 22787,
+  "latency_s": 4.82
+}

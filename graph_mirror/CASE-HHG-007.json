@@ -1,0 +1,28 @@
+{
+  "case_id": "CASE-HHG-007",
+  "case_source": "agent",
+  "status": "open",
+  "verdict": "uncertain",
+  "fraud_probability": 0.5905,
+  "pattern": "account_takeover",
+  "pattern_description": "",
+  "exposure_usd": 111.92,
+  "opened_at": "2016-12-05 00:46:14",
+  "closed_at": "2016-12-05 00:46:14",
+  "summary": "Transaction T3514948 of $111.92 on card C09933-K2 triggered a high risk score of 0.87. The customer profile shows a significant history of 19 prior closed fraud cases, indicating a high-risk relationship or systemic vulnerability on this account. Detector signals point to an account takeover pattern involving mixed-channel activity and multiple match-flag mismatches. Similar historical cases confirm that mixed-channel unauthorized usage patterns on heavily targeted accounts frequently result in confirmed fraud.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; 3 match-flag(s) indicate mismatch (e.g. name/address); Customer C09933 has 19 prior closed cases, showing an extensive history of previous fraud investigations.; The transaction exhibits 3 match-flag mismatches indicating potential credential or identity compromise.",
+  "report_filed": false,
+  "first_txn_id": "T3514948",
+  "txn_ids": [
+    "T3514948"
+  ],
+  "card_ids": [
+    "C09933-K2"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [],
+  "summary_fields": {
+    "pattern": "account_takeover",
+    "exposure_usd": 111.92
+  }
+}

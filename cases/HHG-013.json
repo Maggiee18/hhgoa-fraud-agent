@@ -1,0 +1,82 @@
+{
+  "case_id": "HHG-013",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.6615,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3526826"
+    ],
+    "first_suspicious_txn_id": "T3526826",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Windows"
+    ],
+    "exposure_usd": 35.66,
+    "evidence": [
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3526826"
+        ]
+      },
+      {
+        "claim": "Customer C07671 has four prior closed fraud cases (CC-4294, CC-3761, CC-3216, CC-1475).",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3526826"
+        ]
+      },
+      {
+        "claim": "Flagged transaction is card-not-present (online, product C) utilizing a new desktop device key 4e741fcb6b64.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3526826"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-4497",
+      "CC-3734"
+    ],
+    "summary": "Transaction T3526826 for $35.66 was flagged by the real-time model with a risk score of 0.76. The purchase occurred online using a new device profile ('New' status, Windows desktop, Chrome 66.0) that has no prior history on customer account C07671. Furthermore, the customer profile shows a significant history of prior closed fraud cases (CC-4294, CC-3761, CC-3216, and CC-1475), indicating recurring vulnerability or compromise on this account. Similar historical case CC-4497 also involved confirmed fraudulent card-not-present activity via a new device. Therefore, the risk score is strongly supported by the device anomaly and prior fraudulent history.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-013"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 6,
+  "tokens": 34095,
+  "latency_s": 6.86
+}

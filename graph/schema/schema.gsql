@@ -1,0 +1,135 @@
+// HHGOA Fraud Investigation graph schema.
+// Extends the README's "Suggested graph schema" section. Run with:
+//   gsql graph/schema/schema.gsql
+// or via scripts/setup_graph.py (conn.gsql(open(...).read())).
+//
+// Design notes (see docs/DECISIONS.md for the full rationale):
+// - One unified `Case` vertex for both the 5565 seeded closed cases and
+//   every case the agent opens (`case_source`: "historical" | "agent"),
+//   so case memory retrieval covers both pools uniformly.
+// - V1..V339 / C1..C14 / D1..D15 / M1..M9 (Transaction) and id_01..id_38
+//   (DeviceProfile) are unnamed Vesta model features per the README. They
+//   are stored as compact JSON-encoded STRING attributes rather than ~400
+//   individual GSQL attributes, and used as aggregate/statistical signals
+//   by the agent's tools (e.g. "how many of this transaction's C-features
+//   are outliers vs. this card's history"), never reasoned about by name.
+
+// PRIMARY_ID_AS_ATTRIBUTE="true" is the documented way to make a PRIMARY_ID
+// dot-referenceable in a query body (t.customer_id, WHERE t.txn_id == ...).
+// An earlier attempt re-declared the same name a second time in the
+// attribute list instead — that's a different, older idiom and it silently
+// did NOT create a usable attribute on this TigerGraph version (4.2.5): it
+// let queries type-check in some contexts (read access) but not others
+// (WHERE-clause filtering), and broke data loading ("Unknown vertex
+// attribute: customer_id"). See docs/DECISIONS.md.
+CREATE VERTEX Customer (
+    PRIMARY_ID customer_id STRING,
+    num_cards UINT DEFAULT 0
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+CREATE VERTEX Card (
+    PRIMARY_ID card_id STRING,
+    customer_id STRING,
+    network STRING,       // card4: visa / mastercard / american express / discover
+    card_type STRING,     // card6: credit / debit
+    card1 STRING,
+    card2 STRING,
+    card3 STRING,
+    card5 STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+CREATE VERTEX Transaction (
+    PRIMARY_ID txn_id STRING,
+    ts DATETIME,
+    txn_dt UINT,                 // original TransactionDT (seconds from dataset start)
+    amt DOUBLE,
+    product_cd STRING,
+    channel STRING,               // in_person | online
+    risk_score DOUBLE,
+    addr1 STRING,
+    addr2 STRING,
+    dist1 DOUBLE,
+    dist2 DOUBLE,
+    p_email_domain STRING,
+    r_email_domain STRING,
+    c_features STRING,            // JSON {"C1": ..., ..., "C14": ...}
+    d_features STRING,            // JSON {"D1": ..., ..., "D15": ...}
+    m_features STRING,            // JSON {"M1": ..., ..., "M9": ...}
+    v_features STRING             // JSON {"V1": ..., ..., "V339": ...}
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+CREATE VERTEX DeviceProfile (
+    PRIMARY_ID device_key STRING,  // hash of device_info+os+browser+screen
+    device_type STRING,            // mobile | desktop
+    device_info STRING,
+    os STRING,                     // id_30
+    browser STRING,                // id_31
+    screen STRING,                 // id_33
+    match_status STRING,           // id_34
+    proxy_flag STRING,             // id_23 (renamed from "proxy" — PROXY is a GSQL reserved word)
+    device_new STRING,             // id_15: New | Found
+    id_features STRING             // JSON of remaining id_01..id_38
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+CREATE VERTEX EmailDomain (
+    PRIMARY_ID domain STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+CREATE VERTEX BillingRegion (
+    PRIMARY_ID region_code STRING,  // addr1
+    country_code STRING             // addr2 (87 = home country)
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+CREATE VERTEX FraudCase (  // renamed from "Case" — CASE is a GSQL reserved word
+    PRIMARY_ID case_id STRING,
+    case_source STRING,        // "historical" | "agent"
+    status STRING,             // open | closed_fraud | closed_legitimate | escalated (agent cases)
+                                // confirmed_fraud | cleared (historical, mapped on load)
+    verdict STRING,            // fraud | legitimate | uncertain
+    fraud_probability DOUBLE,
+    pattern STRING,
+    pattern_description STRING,
+    exposure_usd DOUBLE,
+    opened_at DATETIME,
+    closed_at DATETIME,
+    summary STRING,
+    analyst_notes STRING,
+    report_filed BOOL DEFAULT "false",
+    first_txn_id STRING,
+    embedding LIST<DOUBLE>      // TF-IDF over case narratives (agent/memory.py), dim 256
+) WITH STATS="OUTDEGREE_BY_EDGETYPE", PRIMARY_ID_AS_ATTRIBUTE="true"
+
+// --- Edges ---------------------------------------------------------------
+
+CREATE DIRECTED EDGE OWNS (FROM Customer, TO Card) WITH REVERSE_EDGE="reverse_OWNS"
+
+CREATE DIRECTED EDGE MADE (FROM Card, TO Transaction, ts DATETIME) WITH REVERSE_EDGE="reverse_MADE"
+
+CREATE DIRECTED EDGE FROM_DEVICE (FROM Transaction, TO DeviceProfile) WITH REVERSE_EDGE="reverse_FROM_DEVICE"
+
+CREATE DIRECTED EDGE PURCHASER_EMAIL (FROM Transaction, TO EmailDomain) WITH REVERSE_EDGE="reverse_PURCHASER_EMAIL"
+
+CREATE DIRECTED EDGE RECIPIENT_EMAIL (FROM Transaction, TO EmailDomain) WITH REVERSE_EDGE="reverse_RECIPIENT_EMAIL"
+
+CREATE DIRECTED EDGE BILLED_IN (FROM Transaction, TO BillingRegion) WITH REVERSE_EDGE="reverse_BILLED_IN"
+
+// Chronological chain per card, built at load time: orders a card's
+// transactions so velocity/sequence queries (e.g. card testing, R5) don't
+// need a full scan.
+CREATE DIRECTED EDGE NEXT (FROM Transaction, TO Transaction, gap_seconds UINT)
+
+CREATE DIRECTED EDGE INVOLVES (FROM FraudCase, TO Transaction) WITH REVERSE_EDGE="reverse_INVOLVES"
+
+CREATE DIRECTED EDGE ON_CARD (FROM FraudCase, TO Card) WITH REVERSE_EDGE="reverse_ON_CARD"
+
+CREATE DIRECTED EDGE CONNECTED_TO (FROM FraudCase, TO Card) WITH REVERSE_EDGE="reverse_CONNECTED_TO"
+
+CREATE DIRECTED EDGE CASE_DEVICE (FROM FraudCase, TO DeviceProfile) WITH REVERSE_EDGE="reverse_CASE_DEVICE"
+
+// --- Graph -----------------------------------------------------------------
+
+CREATE GRAPH HHGOA_Fraud (
+    Customer, Card, Transaction, DeviceProfile, EmailDomain, BillingRegion, FraudCase,
+    OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL, BILLED_IN, NEXT,
+    INVOLVES, ON_CARD, CONNECTED_TO, CASE_DEVICE
+)

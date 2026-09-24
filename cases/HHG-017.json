@@ -1,0 +1,93 @@
+{
+  "case_id": "HHG-017",
+  "case": {
+    "status": "open",
+    "verdict": "uncertain",
+    "fraud_probability": 0.5255,
+    "pattern": "account_takeover",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3450629"
+    ],
+    "first_suspicious_txn_id": "T3450629",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Windows"
+    ],
+    "exposure_usd": 100.09,
+    "evidence": [
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3450629"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:2",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3450629"
+        ]
+      },
+      {
+        "claim": "Customer uses anonymous email domain 'anonymous.com'",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3450629"
+        ]
+      },
+      {
+        "claim": "Customer has a prior closed fraud case CC-1383",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3450629"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-3292",
+      "CC-3812",
+      "CC-1745",
+      "CC-4614",
+      "CC-2987"
+    ],
+    "summary": "Transaction T3450629 for $100.09 was flagged by the real-time model with a risk score of 0.57. The customer profile shows a history across both online and in-person channels with prior closed cases, aligning with account takeover indicators seen in similar historical fraud cases. The transaction uses an anonymous email domain and a Windows desktop device. Given the mixed-channel activity and pattern similarity to confirmed fraud cases, the transaction is assessed as fraudulent.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-017"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 7,
+  "tokens": 43608,
+  "latency_s": 4.65
+}

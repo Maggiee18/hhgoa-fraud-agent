@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-008",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 55.68,
+  "opened_at": "2016-12-19 22:08:56",
+  "closed_at": "2016-12-19 22:08:56",
+  "summary": "Customer C13171 reported an unauthorized online purchase of $55.68 (transaction T3558054) made on 2016-12-19 using card C13171-K2. The transaction occurred on a new device ('f7b3887f9e33') that was not previously seen on this account. The customer has a long transaction history with numerous prior closed fraud cases, indicating repeated targeting or compromise of their accounts. Based on the customer report and the use of an unrecognized device for a card-not-present transaction, the verdict is fraud.",
+  "analyst_notes": "Transaction T3558054 was executed via online channel using a newly found device key f7b3887f9e33.; Customer C13171 has 19 prior closed fraud cases, demonstrating a history of recurring account compromise.",
+  "report_filed": false,
+  "first_txn_id": "T3558054",
+  "txn_ids": [
+    "T3558054"
+  ],
+  "card_ids": [
+    "C13171-K2"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "f7b3887f9e33"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 55.68
+  }
+}

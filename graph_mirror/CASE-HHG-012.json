@@ -1,0 +1,28 @@
+{
+  "case_id": "CASE-HHG-012",
+  "case_source": "agent",
+  "status": "open",
+  "verdict": "uncertain",
+  "fraud_probability": 0.5225,
+  "pattern": "account_takeover",
+  "pattern_description": "",
+  "exposure_usd": 30.91,
+  "opened_at": "2016-12-18 04:00:31",
+  "closed_at": "2016-12-18 04:00:31",
+  "summary": "Transaction T3553342 was flagged by the real-time model with a risk score of 0.55. The customer profile C05876 shows a high volume of transactions with prior closed fraud cases, and detector signals indicate mixed-channel history along with address/name mismatch flags. Furthermore, similar historical cases highlight patterns of account takeover with mixed-channel inconsistencies. Given these indicators, the transaction leans toward fraudulent activity.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; 1 match-flag(s) indicate mismatch (e.g. name/address); Customer has 2 prior closed fraud cases (CC-0003, CC-2370); Detector flagged address/name mismatch; Customer history spans both in-person and online channels",
+  "report_filed": false,
+  "first_txn_id": "T3553342",
+  "txn_ids": [
+    "T3553342"
+  ],
+  "card_ids": [
+    "C05876-K2"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [],
+  "summary_fields": {
+    "pattern": "account_takeover",
+    "exposure_usd": 30.91
+  }
+}

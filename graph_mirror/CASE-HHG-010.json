@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-010",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 0.8055,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 1000.03,
+  "opened_at": "2016-12-02 15:18:27",
+  "closed_at": "2016-12-02 15:18:27",
+  "summary": "Transaction T3506725 of $1,000.03 was flagged by the real-time model with a high risk score of 0.90 due to an online purchase originating from a new device using an anonymous email domain ('anonymous.com'). The customer profile indicates prior closed cases (CC-0873), and the transaction matches indicators of unauthorized card-not-present activity on an unverified device. The combination of anonymous email domains, a newly registered device profile, and a high-value online transaction strongly supports a fraudulent classification.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: not flagged); Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:2; Both purchaser and recipient email domains are set to anonymous.com; Customer has a history of prior closed cases (CC-0873)",
+  "report_filed": false,
+  "first_txn_id": "T3506725",
+  "txn_ids": [
+    "T3506725"
+  ],
+  "card_ids": [
+    "C10434-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "3318e3e0de60"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 1000.03
+  }
+}

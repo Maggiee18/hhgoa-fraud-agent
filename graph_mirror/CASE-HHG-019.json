@@ -1,0 +1,32 @@
+{
+  "case_id": "CASE-HHG-019",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 0.6555,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 99.92,
+  "opened_at": "2016-12-01 17:28:53",
+  "closed_at": "2016-12-01 17:28:53",
+  "summary": "Transaction T3503878 was flagged by the real-time model with a high risk score of 0.90 due to originating from a new device key on an online channel. The customer profile indicates extensive prior transaction history (248 transactions) spanning both in_person and online channels, alongside multiple prior closed fraud cases. Similar historical cases suggest that new device usage can occasionally represent legitimate cardholder behavior, such as a confirmed purchase from a new device in case CC-0539.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: not flagged); Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:0; Customer has 248 prior transactions totaling $49,409.28 across in_person and online channels.; Customer profile has four prior closed cases (CC-2011, CC-2087, CC-2860, CC-5026).",
+  "report_filed": true,
+  "first_txn_id": "T3503878",
+  "txn_ids": [
+    "T3503878"
+  ],
+  "card_ids": [
+    "C07987-K2"
+  ],
+  "connected_card_ids": [
+    "C01983-K1"
+  ],
+  "device_keys": [
+    "c88e55ba8f7a"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 99.92
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-013",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 0.6615,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 35.66,
+  "opened_at": "2016-12-09 02:39:29",
+  "closed_at": "2016-12-09 02:39:29",
+  "summary": "Transaction T3526826 for $35.66 was flagged by the real-time model with a risk score of 0.76. The purchase was made online using a new device profile (desktop, Windows, chrome 66.0) on card C07671-K2. Customer C07671 has a high prior closed case count of 4, indicating a history of account compromise or fraud. Given the combination of a high risk score, new device usage, and prior fraud history, the transaction exhibits strong indicators of unauthorized card-not-present fraud.",
+  "analyst_notes": "Transaction from a device profile marked New for this account (proxy: not flagged); Customer C07671 has 4 prior closed fraud cases (CC-1475, CC-3216, CC-3761, CC-4294).; The flagged transaction occurs from an online channel using a newly registered device key (4e741fcb6b64).",
+  "report_filed": false,
+  "first_txn_id": "T3526826",
+  "txn_ids": [
+    "T3526826"
+  ],
+  "card_ids": [
+    "C07671-K2"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "4e741fcb6b64"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 35.66
+  }
+}

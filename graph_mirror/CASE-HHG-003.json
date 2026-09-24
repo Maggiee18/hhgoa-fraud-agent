@@ -1,0 +1,28 @@
+{
+  "case_id": "CASE-HHG-003",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "account_takeover",
+  "pattern_description": "",
+  "exposure_usd": 49.0,
+  "opened_at": "2016-12-10 13:01:21",
+  "closed_at": "2016-12-10 13:01:21",
+  "summary": "Customer C08623 reported an unrecognized $49.00 purchase on transaction T3530164. The customer has a lengthy history with prior closed fraud cases (CC-1589, CC-2817, CC-2935, CC-3327, CC-3682, CC-4957) and mixed-channel activity. Detector signals indicate match flags associated with account takeover. Given the customer report and similar historical fraud cases involving mixed channels, the transaction is confirmed as fraudulent.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; 3 match-flag(s) indicate mismatch (e.g. name/address); Customer has 6 prior closed fraud cases indicating a history of compromise.; Detector noted 3 match-flags indicating mismatch such as name or address on transaction T3530164.",
+  "report_filed": false,
+  "first_txn_id": "T3530164",
+  "txn_ids": [
+    "T3530164"
+  ],
+  "card_ids": [
+    "C08623-K2"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [],
+  "summary_fields": {
+    "pattern": "account_takeover",
+    "exposure_usd": 49.0
+  }
+}

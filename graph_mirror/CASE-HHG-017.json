@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-HHG-017",
+  "case_source": "agent",
+  "status": "open",
+  "verdict": "uncertain",
+  "fraud_probability": 0.5255,
+  "pattern": "card_not_present_new_device",
+  "pattern_description": "",
+  "exposure_usd": 100.09,
+  "opened_at": "2016-11-11 23:46:24",
+  "closed_at": "2016-11-11 23:46:24",
+  "summary": "Transaction T3450629 was flagged by the real-time model with a risk score of 0.57. The transaction occurs online using a new Windows desktop device, an anonymous email domain (anonymous.com), and a hidden IP proxy. Furthermore, the customer profile shows prior closed fraud cases, reinforcing the high risk of unauthorized card-not-present activity.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; Identity match status: match_status:2; New device usage (device_new: Found); Anonymous email domain used for both purchaser and recipient; Hidden IP proxy detected; Customer has prior closed fraud cases",
+  "report_filed": false,
+  "first_txn_id": "T3450629",
+  "txn_ids": [
+    "T3450629"
+  ],
+  "card_ids": [
+    "C04570-K1"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [
+    "a8ae52df946b"
+  ],
+  "summary_fields": {
+    "pattern": "card_not_present_new_device",
+    "exposure_usd": 100.09
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "case_id": "HHG-020",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.7485,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3509359"
+    ],
+    "first_suspicious_txn_id": "T3509359",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "Trident/7.0"
+    ],
+    "exposure_usd": 125.08,
+    "evidence": [
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3509359"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3509359"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:2",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3509359"
+        ]
+      },
+      {
+        "claim": "Prior closed fraud cases exist on customer profile: CC-2447, CC-2277",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3509359"
+        ]
+      },
+      {
+        "claim": "Email domain mismatch between purchaser (yahoo.com) and recipient (cox.net)",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3509359"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Analyst review of transaction T3509359 ($125.08, online) reveals it originates from a new device profile running Windows 10 with Internet Explorer 11. The customer profile indicates prior closed fraud cases (CC-2447, CC-2277), increasing suspicion despite a moderate risk score of 0.52. The mismatch between the purchaser email domain (yahoo.com) and recipient email domain (cox.net) further supports unauthorized use.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-020"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "final": [
+      {
+        "action": "GENERATE_REPORT",
+        "route": "auto",
+        "reason": "No rule triggered; recording the review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No policy rule called for a report.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 7,
+  "tokens": 50203,
+  "latency_s": 21.1
+}

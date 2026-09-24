@@ -1,0 +1,28 @@
+{
+  "case_id": "CASE-HHG-018",
+  "case_source": "agent",
+  "status": "closed_fraud",
+  "verdict": "fraud",
+  "fraud_probability": 1.0,
+  "pattern": "account_takeover",
+  "pattern_description": "",
+  "exposure_usd": 39.08,
+  "opened_at": "2016-11-27 13:41:26",
+  "closed_at": "2016-11-27 13:41:26",
+  "summary": "Customer C02354 reported an unrecognized in-person purchase of $39.08 on transaction T3491361. The detector signaled account takeover due to mixed channel activity and match-flag mismatches, aligning with similar historical fraud cases where unauthorized small-ticket transactions occurred. Given the direct customer report and matching historical patterns of account compromise, the transaction is verified as fraudulent.",
+  "analyst_notes": "Customer's history spans both channels: ['in_person', 'online']; 4 match-flag(s) indicate mismatch (e.g. name/address); Customer C02354 has an extensive transaction history with 20 prior closed cases.; Historical cases with identical profiles (e.g., CC-3433) involve confirmed fraud of the exact same amount ($39.08).",
+  "report_filed": false,
+  "first_txn_id": "T3491361",
+  "txn_ids": [
+    "T3491361"
+  ],
+  "card_ids": [
+    "C02354-K2"
+  ],
+  "connected_card_ids": [],
+  "device_keys": [],
+  "summary_fields": {
+    "pattern": "account_takeover",
+    "exposure_usd": 39.08
+  }
+}

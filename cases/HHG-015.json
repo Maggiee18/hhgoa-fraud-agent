@@ -1,0 +1,132 @@
+{
+  "case_id": "HHG-015",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.5555,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3464869"
+    ],
+    "first_suspicious_txn_id": "T3464869",
+    "connected_card_ids": [
+      "C00681-K1",
+      "C05292-K1",
+      "C11413-K1"
+    ],
+    "connected_device_profiles": [
+      "Trident/7.0"
+    ],
+    "exposure_usd": 599.94,
+    "evidence": [
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3464869"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:2",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3464869"
+        ]
+      },
+      {
+        "claim": "Flagged transaction uses an anonymous email domain (anonymous.com) for both purchaser and recipient emails.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3464869"
+        ]
+      },
+      {
+        "claim": "Customer has three prior closed fraud cases on record, indicating recurring vulnerability.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3464869"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2897",
+      "CC-5107",
+      "CC-4053",
+      "CC-0764",
+      "CC-0389"
+    ],
+    "summary": "Transaction T3464869 is an online purchase of $599.94 originating from a new device using an anonymous email domain (anonymous.com), which significantly elevates the fraud risk. The customer profile indicates a history of prior closed fraud cases (CC-3886, CC-1313, CC-0615), pointing toward a vulnerable account. The combination of a novel device key, anonymous email, and high transaction amount strongly points to unauthorized card-not-present activity.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-015"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (device profile d8b0b65b1a98) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — device profile d8b0b65b1a98"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing device profile d8b0b65b1a98"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: verdict uncertain and exposure exceeds $500"
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (device profile d8b0b65b1a98) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — device profile d8b0b65b1a98"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing device profile d8b0b65b1a98"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: verdict uncertain and exposure exceeds $500"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Policy rule triggered FILE_REPORT — see rules_applied.",
+    "narrative": "On November 17, 2016, a suspicious card-not-present transaction involving a new device was identified for customer C03042 using card id C03042-K1, resulting in an exposure of $599.94 under affected transaction ID T3464869. The flagged transaction utilized an anonymous email domain (anonymous.com) for both the purchaser and recipient emails. The customer's history spans both in-person and online channels, and the identity match status returned match_status:2. Furthermore, the customer has three prior closed fraud cases on record, indicating recurring vulnerability. Connected card IDs associated with the customer include C00681-K1, C05292-K1, and C11413-K1. There is no customer response on file regarding this activity. This pattern of card-not-present activity on a new device combined with anonymous email usage and prior fraud history is suspicious.",
+    "subjects": [
+      "C03042"
+    ],
+    "total_amount_usd": 599.94,
+    "activity_dates": [
+      "2016-11-17",
+      "2016-11-17"
+    ]
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 7,
+  "tokens": 77670,
+  "latency_s": 4.54
+}

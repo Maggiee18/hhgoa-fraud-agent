@@ -1,0 +1,124 @@
+{
+  "case_id": "HHG-019",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.6555,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "T3503878"
+    ],
+    "first_suspicious_txn_id": "T3503878",
+    "connected_card_ids": [
+      "C01983-K1"
+    ],
+    "connected_device_profiles": [
+      "Windows"
+    ],
+    "exposure_usd": 99.92,
+    "evidence": [
+      {
+        "claim": "Transaction from a device profile marked New for this account (proxy: not flagged)",
+        "source": "graph",
+        "ref": "detector:card_not_present_new_device",
+        "entity_ids": [
+          "T3503878"
+        ]
+      },
+      {
+        "claim": "Customer's history spans both channels: ['in_person', 'online']",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3503878"
+        ]
+      },
+      {
+        "claim": "Identity match status: match_status:0",
+        "source": "graph",
+        "ref": "detector:account_takeover",
+        "entity_ids": [
+          "T3503878"
+        ]
+      },
+      {
+        "claim": "Historical precedent in case CC-0539 shows an identical transaction amount ($99.92) and high risk score resulting in a cleared alert after cardholder confirmation of a new device.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3503878"
+        ]
+      },
+      {
+        "claim": "Customer has a robust transaction history of 248 transactions totaling $49,409.28 across multiple channels.",
+        "source": "graph",
+        "ref": "synthesis",
+        "entity_ids": [
+          "T3503878"
+        ]
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0539"
+    ],
+    "summary": "Transaction T3503878 was flagged by the real-time model with a high risk score of 0.90 due to originating from a new device profile. However, the customer profile shows extensive historical activity (248 prior transactions totaling over $49,400) spanning both in-person and online channels. Furthermore, a highly similar historical case (CC-0539) involved a nearly identical $99.92 transaction amount and a high risk score that was ultimately cleared after the cardholder confirmed a purchase from a new device.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-019"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (device profile c88e55ba8f7a) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — device profile c88e55ba8f7a"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing device profile c88e55ba8f7a"
+      }
+    ],
+    "final": [
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: shared origin (device profile c88e55ba8f7a) across cards"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: named shared element — device profile c88e55ba8f7a"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: cards sharing device profile c88e55ba8f7a"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Policy rule triggered FILE_REPORT — see rules_applied.",
+    "narrative": "On December 1, 2016, a suspicious card-not-present transaction (T3503878) totaling $99.92 was conducted using card ID C07987-K2 associated with customer C07987. The transaction originated from a device profile marked as new for this account without proxy flagging, presenting an identity match status of zero. The customer maintains a robust history of 248 transactions totaling $49,409.28 across in-person and online channels, and is connected to card ID C01983-K1. Historical precedent in case CC-0539 indicates an identical transaction amount of $99.92 and a high risk score, which previously resulted in a cleared alert after cardholder confirmation of a new device. However, no customer response regarding the current activity is available on file. This activity is deemed suspicious due to the use of a new device profile for a card-not-present transaction.",
+    "subjects": [
+      "C07987"
+    ],
+    "total_amount_usd": 99.92,
+    "activity_dates": [
+      "2016-12-01",
+      "2016-12-01"
+    ]
+  },
+  "stop_reason": "Reached maximum evidence-gathering rounds for this alert.",
+  "tool_calls": 7,
+  "tokens": 96441,
+  "latency_s": 4.74
+}
