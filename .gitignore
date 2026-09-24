@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 venv/
 data/*.csv
+!data/case_pack.csv
 data/README.md
 *.log
 .DS_Store

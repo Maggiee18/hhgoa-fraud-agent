@@ -240,6 +240,7 @@ with tabs[3]:
             from pyvis.network import Network
 
             net = Network(height="420px", width="100%", bgcolor="#ffffff", font_color="#222")
+            net.barnes_hut(gravity=-4000, central_gravity=0.3, spring_length=140, spring_strength=0.04, damping=0.12)
             center = case_pack[case_pack["case_id"] == selected_case_id]["card_id"].iloc[0] if case_pack is not None and selected_case_id in case_pack["case_id"].values else "flagged card"
             net.add_node(center, label=str(center), color=VERDICT_COLOR.get(verdict, "#1f77b4"), size=30)
             for c in conn_cards:
@@ -248,6 +249,19 @@ with tabs[3]:
             for d in conn_devices:
                 net.add_node(d, label=d, color="#607d8b", shape="box", size=18)
                 net.add_edge(center, d, label="from device")
+            # Without an explicit stabilization/fit config, vis-network starts
+            # every node stacked at the origin and only spreads them out as
+            # its physics simulation runs live in the browser - on a slow
+            # load or a static capture that can look like a single dot even
+            # though every node and edge is actually present. Forcing a
+            # settled layout before first paint avoids that.
+            net.set_options("""
+            var options = {
+              "physics": {
+                "stabilization": {"enabled": true, "iterations": 300, "fit": true}
+              }
+            }
+            """)
             html_path = f"/tmp/graph_{selected_case_id}.html"
             net.write_html(html_path, open_browser=False, notebook=False)
             with open(html_path) as f:
